@@ -1,0 +1,43 @@
+version: '3'
+services:
+  nodejs:
+    image: node:12
+    volumes:
+      - "./app:/app"
+    working_dir: '/app'
+    environment:
+      PORT: 8080
+    networks:
+      - app-network
+    command: npm run start
+
+  nginx:
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./volumes/nginx:/etc/nginx/conf.d
+      - ./volumes/certbot/conf:/etc/letsencrypt
+      - ./volumes/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - nodejs
+    networks:
+      - app-network
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./volumes/certbot/conf:/etc/letsencrypt
+      - ./volumes/certbot/www:/var/www/certbot
+
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+networks:
+  app-network:
+    # opens all ports between containers on the same bridge network, 
+    driver: bridge 
+

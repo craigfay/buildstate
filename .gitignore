@@ -1,0 +1,16 @@
+# NPM Packages
+node_modules
+
+# MacOS Artifact
+.DS_Store
+
+# API Keys
+secrets.js
+
+# Docker Compose Env
+.env
+
+# SSL
+volumes/certbot/
+volumes/certbot/
+volumes/nginx/generated.conf

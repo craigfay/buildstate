@@ -1,0 +1,18 @@
+{
+  "name": "transaction-api",
+  "scripts": {
+    "start": "ts-node main.ts",
+    "prestart": "npm install",
+    "watch": "nodemon --ext .ts --exec 'npm run start'",
+    "test": "ts-node tests/_run"
+  },
+  "dependencies": {
+    "@types/node": "^12.7.1",
+    "node-fetch": "^2.6.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}

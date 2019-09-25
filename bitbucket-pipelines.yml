@@ -1,0 +1,15 @@
+# pipelines:
+#   default:
+#     - step:
+#         name: test
+#         image: node:12
+#         caches:
+#           - dependencies
+#         script:
+#           - cd app
+#           - npm install
+#           - npm run test
+
+# definitions:
+#   caches:
+#     dependencies: app/node_modules

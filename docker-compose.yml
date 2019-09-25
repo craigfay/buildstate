@@ -1,0 +1,12 @@
+version: '3'
+services:
+  nodejs:
+    image: node:12
+    volumes:
+      - "./app:/app"
+    working_dir: '/app'
+    environment:
+      PORT: 8080
+    ports:
+      - "80:8080"
+    command: npm run start
