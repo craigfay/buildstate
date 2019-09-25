@@ -33,7 +33,7 @@ async function rebuild() {
 
   for (const file of mutationFiles) {
     const mutater = require(`${mutationsDir}/${file}`);
-    data = mutater(data);
+    data = mutater(data, id);
   }
 
   console.log(data);
@@ -52,10 +52,10 @@ export interface Rebuildable {
 
 
 (async function main() {
-  // commit(data => {data.products = []; return data;});
-  // commit(data => {data.products.push({ id: id(), name: 'Lumbar Pillow', price: 2000 }); return data;});
-  // commit(data => {data.products.push({ id: id(), name: 'Soft Rug', price: 3000 }); return data;});
-  // commit(data => {data.products.push({ id: id(), name: 'Comfy Blanket', price: 4000 }); return data;});
+  // commit((data, id) => {data.products = []; return data;});
+  // commit((data, id) => {data.products.push({ id: id(), name: 'Lumbar Pillow', price: 2000 }); return data;});
+  // commit((data, id) => {data.products.push({ id: id(), name: 'Soft Rug', price: 3000 }); return data;});
+  // commit((data, id) => {data.products.push({ id: id(), name: 'Comfy Blanket', price: 4000 }); return data;});
 
   const data = await rebuild();
   // console.log(JSON.stringify(data, null, 2));
