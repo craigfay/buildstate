@@ -30,11 +30,19 @@ function makeRebuild(mutationPath) {
 }
 
 function makeCommit(mutationPath) {
-  return async function commit(fn) {
+  return async function commit(fn, state={}) {
     const timestamp = new Date().toISOString();
-    const code = `module.exports = ${fn.toString()}`;
-    const contents = Uglify.minify(code).code;
-    await write(`${mutationPath}/${timestamp}.js`, contents);
+
+    // State
+    const stateDeclarations = Object.keys(state).reduce((str, key) => {
+      return str + `var ${key} = ${JSON.stringify(state[key])}; `;
+    }, '')
+
+    // Mutater
+    const mutater = `module.exports = ${fn.toString()}`;
+    const source = stateDeclarations + mutater;
+    const contents = Uglify.minify(source);
+    await write(`${mutationPath}/${timestamp}.js`, contents.code);
     return true;
   }
 }
@@ -42,14 +50,16 @@ function makeCommit(mutationPath) {
 type Commitable = (data:any, id:() => string) => any;
 export interface Rebuildable {
   rebuild: () => Promise<any>
-  commit: (commit:Commitable) => Promise<boolean>
+  commit: (commit:Commitable, state?:any) => Promise<boolean>
 }
+
+const productName = 'Soft Rug';
 
 async function seed(mutationPath) {
   const h = history(mutationPath);
   h.commit((data, id) => {data.products = []; return data;});
   h.commit((data, id) => {data.products.push({ id: id(), name: 'Lumbar Pillow', price: 2000 }); return data;});
-  h.commit((data, id) => {data.products.push({ id: id(), name: 'Soft Rug', price: 3000 }); return data;});
+  h.commit((data, id) => {data.products.push({ id: id(), name: productName, price: 3000 }); return data;}, { productName });
   h.commit((data, id) => {data.products.push({ id: id(), name: 'Comfy Blanket', price: 4000 }); return data;});
   console.log(await h.rebuild())
 }
