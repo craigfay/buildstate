@@ -11,12 +11,10 @@ const dir = promisify(fs.readdir);
 
 const mutationsDir = '/Users/craigfay/Repositories/warehouse/app/mutations';
 
-export function id() {
-  return randomBytes(32).toString('hex');
-}
-
-function remove(list, predicate) {
-
+type Commitable = (data:any, id:() => string) => any;
+export interface Rebuildable {
+  rebuild: (buildfile:string) => object
+  commit: (commit:Commitable) => boolean
 }
 
 async function commit(fn) {
@@ -28,35 +26,25 @@ async function commit(fn) {
 
 async function rebuild() {
   let data:any = {};
+  const id = () => randomBytes(32).toString('hex');
 
   const mutationFiles = await dir(mutationsDir);
-
   for (const file of mutationFiles) {
     const mutater = require(`${mutationsDir}/${file}`);
     data = mutater(data, id);
   }
-
-  console.log(data);
+  return data;
 }
 
-export interface Commitable {
-  id: string
-  payload: object | null
-  timestamp: string
-}
-
-export interface Rebuildable {
-  rebuild: (buildfile:string) => object
-  commit: (commit:Commitable) => boolean
+function seed() {
+  commit((data, id) => {data.products = []; return data;});
+  commit((data, id) => {data.products.push({ id: id(), name: 'Lumbar Pillow', price: 2000 }); return data;});
+  commit((data, id) => {data.products.push({ id: id(), name: 'Soft Rug', price: 3000 }); return data;});
+  commit((data, id) => {data.products.push({ id: id(), name: 'Comfy Blanket', price: 4000 }); return data;});
 }
 
 
 (async function main() {
-  // commit((data, id) => {data.products = []; return data;});
-  // commit((data, id) => {data.products.push({ id: id(), name: 'Lumbar Pillow', price: 2000 }); return data;});
-  // commit((data, id) => {data.products.push({ id: id(), name: 'Soft Rug', price: 3000 }); return data;});
-  // commit((data, id) => {data.products.push({ id: id(), name: 'Comfy Blanket', price: 4000 }); return data;});
-
-  const data = await rebuild();
+  // const data = await rebuild();
   // console.log(JSON.stringify(data, null, 2));
 })()
