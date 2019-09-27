@@ -1,9 +1,18 @@
 import * as fs from 'fs';
 import * as rl from 'readline';
 import * as path from 'path';
+import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 const append = promisify(fs.appendFile);
 
+// Generate a probabilistically unique id
+const id = () => randomBytes(32).toString('hex');
+
+interface Mutation {
+  id: string
+  action: 'create' | 'update' | 'delete'
+  payload: object
+}
 
 export function makeCommitRepository(file:string) {
   return {
