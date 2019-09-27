@@ -1,6 +1,9 @@
 # NPM Packages
 node_modules
 
+# Mutation Files
+mutations
+
 # MacOS Artifact
 .DS_Store
 
