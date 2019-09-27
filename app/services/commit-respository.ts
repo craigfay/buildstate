@@ -59,15 +59,16 @@ function makeRebuildFunction(file:string) {
 }
 
 function applyMutation(data:State, mutation:Mutation): State {
-  if (mutation.action == 'create') {
-    if (!data[mutation.entity]) data[mutation.entity] = [];
-    data[mutation.entity].push(mutation.payload);
+  const { action, entity, payload } = mutation;
+  if (action == 'create') {
+    if (!data[entity]) data[entity] = [];
+    data[entity].push(payload);
     return data;
   }
-  else if (mutation.action == 'update') {
-    const index = data[mutation.entity].findIndex(record => record.id == mutation.payload.id);
+  else if (action == 'update') {
+    const index = data[entity].findIndex(record => record.id == payload.id);
     if (index === -1) return data;
-    data[mutation.entity][index] = mutation.payload;
+    data[entity][index] = payload;
     return data;
   }
 }
