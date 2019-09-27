@@ -19,6 +19,10 @@ interface Payload {
   [key:string]: string | boolean | number | null
 }
 
+interface State {
+  [entity:string]: Array<Payload>
+}
+
 export function makeCommitRepository(file:string) {
   return {
     commit: makeCommitFunction(file),
@@ -37,18 +41,34 @@ function makeCommitFunction(file:string) {
   }
 }
 
+
 function makeRebuildFunction(file:string) {
-  return async function(descriptors:object) {
+  return async function() {
     return new Promise((resolve, reject) => {
-      let commits = [];
+      let data:State = {};
+
       // Read the file line by line, parsing each as JSON
       const lines = rl.createInterface({ input: fs.createReadStream(file) });
       lines.on('line', line => {
-        commits.push(JSON.parse(line));
+        data = applyMutation(data, JSON.parse(line));
       })
       lines.on('error', error => reject({ errors: ['An unexpected error occured while retrieving transactions'] }))
-      lines.on('close', () => resolve(commits));
+      lines.on('close', () => resolve(data));
     }) 
+  }
+}
+
+function applyMutation(data:State, mutation:Mutation): State {
+  if (mutation.action == 'create') {
+    if (!data[mutation.entity]) data[mutation.entity] = [];
+    data[mutation.entity].push(mutation.payload);
+    return data;
+  }
+  else if (mutation.action == 'update') {
+    const index = data[mutation.entity].findIndex(record => record.id == mutation.payload.id);
+    if (index === -1) return data;
+    data[mutation.entity][index] = mutation.payload;
+    return data;
   }
 }
 
@@ -62,3 +82,7 @@ async function seed() {
   state.commit({ entity: 'product', action: 'create', payload: { name: 'cozy sweater', price: 2500 }});
   state.commit({ entity: 'product', action: 'update', payload: { id: pillowId, name: 'nice pillow', price: 1000 }});
 }
+
+(async function build() {
+  console.log(await state.rebuild());
+})()
