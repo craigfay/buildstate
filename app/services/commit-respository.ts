@@ -27,15 +27,13 @@ export function makeCommitRepository(file:string) {
 }
 
 function makeCommitFunction(file:string) {
-  return async function(mutation:Mutation): Promise<Boolean> {
+  return async function(mutation:Mutation): Promise<string | null> {
     try {
       // @TODO validate mutation
       if (mutation.action == 'create') mutation.payload.id = id();
       await append(file, JSON.stringify(mutation) + '\n');
-      return true;
-    } catch (e) {
-      return false;
-    }
+      return mutation.payload.id;
+    } catch (e) { return null }
   }
 }
 
@@ -58,6 +56,9 @@ function makeRebuildFunction(file:string) {
 const historyFile = path.resolve(path.join(__dirname, './buildfile'));
 export const state = makeCommitRepository(historyFile);
 
-(async function() {
+async function seed() {
   state.commit({ entity: 'product', action: 'create', payload: { name: 'soft blanket', price: 5000 }});
-})()
+  const pillowId = await state.commit({ entity: 'product', action: 'create', payload: { name: 'nice pillow', price: 3500 }});
+  state.commit({ entity: 'product', action: 'create', payload: { name: 'cozy sweater', price: 2500 }});
+  state.commit({ entity: 'product', action: 'update', payload: { id: pillowId, name: 'nice pillow', price: 1000 }});
+}
