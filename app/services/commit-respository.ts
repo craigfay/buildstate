@@ -7,12 +7,12 @@ const append = promisify(fs.appendFile);
 
 export function makeCommitRepository(file:string) {
   return {
-    create: makeCreateFunction(file),
-    retrieve: makeRetrieveFunction(file),
+    commit: makeCommitFunction(file),
+    rebuild: makeRebuildFunction(file),
   }
 }
 
-function makeCreateFunction(file:string) {
+function makeCommitFunction(file:string) {
   return async function(t): Promise<Boolean> {
     try {
       // Persist transaction
@@ -24,7 +24,7 @@ function makeCreateFunction(file:string) {
   }
 }
 
-function makeRetrieveFunction(file:string) {
+function makeRebuildFunction(file:string) {
   return async function(descriptors:object) {
     return new Promise((resolve, reject) => {
       let commits = [];
@@ -39,14 +39,10 @@ function makeRetrieveFunction(file:string) {
   }
 }
 
-// Determine whether or not an object matches a description
-function matchesDescription(obj:object, descriptors:object) {
-  for (const key of Object.keys(descriptors)) {
-    if (obj[key] !== descriptors[key]) return false;
-  }
-  return true;
-}
-
 // Export
-const historyFile = path.resolve(path.join(__dirname, './history'));
-export const transactionRepository = makeTransactionRepository(historyFile);
+const historyFile = path.resolve(path.join(__dirname, './buildfile'));
+export const state = makeCommitRepository(historyFile);
+
+(async function() {
+  state.commit({success:true})
+})()
