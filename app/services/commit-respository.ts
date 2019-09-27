@@ -9,9 +9,14 @@ const append = promisify(fs.appendFile);
 const id = () => randomBytes(32).toString('hex');
 
 interface Mutation {
-  id: string
+  entity: string
   action: 'create' | 'update' | 'delete'
-  payload: object
+  payload: Payload
+}
+
+interface Payload {
+  id?: string
+  [key:string]: string | boolean | number | null
 }
 
 export function makeCommitRepository(file:string) {
@@ -22,10 +27,11 @@ export function makeCommitRepository(file:string) {
 }
 
 function makeCommitFunction(file:string) {
-  return async function(t): Promise<Boolean> {
+  return async function(mutation:Mutation): Promise<Boolean> {
     try {
-      // Persist transaction
-      await append(file, JSON.stringify(t) + '\n');
+      // @TODO validate mutation
+      if (mutation.action == 'create') mutation.payload.id = id();
+      await append(file, JSON.stringify(mutation) + '\n');
       return true;
     } catch (e) {
       return false;
@@ -53,5 +59,5 @@ const historyFile = path.resolve(path.join(__dirname, './buildfile'));
 export const state = makeCommitRepository(historyFile);
 
 (async function() {
-  state.commit({success:true})
+  state.commit({ entity: 'product', action: 'create', payload: { name: 'soft blanket', price: 5000 }});
 })()
