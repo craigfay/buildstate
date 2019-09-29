@@ -1,14 +1,12 @@
 const datastoreHandler = {
   set(target, keyname, value) {
-    // Do some kind of validation
+    // Validate input
     if (!Array.isArray(value)) {
       throw new Error('Datastore values must be Arrays of Entities.');
     }
-    else {
-      // Success
-      target[keyname] = value;
-      return true;
-    }
+    // Success
+    target[keyname] = collection(value);
+    return true;
   }
 }
 function datastore() {
@@ -18,17 +16,17 @@ function datastore() {
 const collectionHandler = {
   set(target, keyname, value) {
     // Only handle keys that are indices
-    if (!Number.isInteger(+keyname)) {
-      // Do some kind of validation
+    if (Number.isInteger(+keyname)) {
+      // Validate input
       if (!value.id) {
         throw new Error('Collection items must have an id');
       }
-      // Success
-      target[keyname] = value;
-      return true;
     }
+    // Success
+    target[keyname] = value;
+    return true;
   }
 }
-function collection() {
-  return new Proxy([], collectionHandler);
+function collection(list=[]) {
+  return new Proxy(list, collectionHandler);
 }
