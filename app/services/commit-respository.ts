@@ -11,16 +11,16 @@ const id = () => randomBytes(32).toString('hex');
 interface Mutation {
   entity: string
   action: 'create' | 'update' | 'delete'
-  payload: Payload
+  payload: Entity
 }
 
-interface Payload {
+interface Entity {
   id?: string
   [key:string]: string | boolean | number | null
 }
 
 interface State {
-  [entity:string]: Array<Payload>
+  [entity:string]: Array<Entity>
 }
 
 export function makeCommitRepository(file:string) {
