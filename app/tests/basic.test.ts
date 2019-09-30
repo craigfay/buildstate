@@ -47,6 +47,17 @@ async function updateTest() {
     }
 }
 
+async function updateManyTest() {
+    // Make Store
+    const store = await datastore(file); 
+    const affectedIds = await store.products.updateMany(
+      record => record.price > 2000,
+      { price: 1000 },
+    );
+    if (affectedIds.length != 3)
+    throw new Error('Unexpected product length after updateMany')
+}
+
 
 async function deleteTest() {
   const store = await datastore(file); 
@@ -69,6 +80,7 @@ async function unlinkTest() {
 export const tests = [
   createTest,
   updateTest,
+  updateManyTest,
   deleteTest,
   deleteManyTest,
   unlinkTest,
