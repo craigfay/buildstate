@@ -14,7 +14,7 @@ interface Datastore {
 }
 
 interface Mutation {
-  action: 'define', 'create'
+  action: 'define' | 'create'
   details: any,
 }
 
@@ -30,8 +30,11 @@ export function persistenceHandler(file:string) {
 function makeCommitFunction(file:string) {
   return async function(mutation:Mutation): Promise<string | null> {
     try {
+      if (mutation.action == 'create') {
+        mutation.details.record.id = id();
+      }
       await append(file, JSON.stringify(mutation) + '\n');
-      return mutation.details.id;
+      return mutation.details.record.id;
     } catch (e) { return null }
   }
 }
