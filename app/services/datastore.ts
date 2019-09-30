@@ -24,13 +24,22 @@ export async function datastore(file:string) {
     if (data[keyname]) {
       return {
         // See all records
-        records: () => data[keyname],
+        all: () => data[keyname],
         // Create a new record in the table
         create: async record => {
-          const id = await persistence.commit({ action: 'create', details: { table: keyname, record }});
+          const affectedId = await persistence.commit({ action: 'create', details: { table: keyname, record }});
           data[keyname].push(record);
-          return id;
-        }
+          return affectedId;
+        },
+        // Delete a record given a predicate
+        delete: async predicate => {
+          const deleteable = data[keyname].find(predicate);
+          if (deleteable) {
+            const affectedId = await persistence.commit({ action: 'delete', details: { table: keyname, record: deleteable }});
+            data[keyname] = data[keyname].filter(record => record.id != deleteable.id);
+            return affectedId;
+          }
+        },
       }
     }
   }
