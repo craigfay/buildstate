@@ -32,6 +32,16 @@ export async function datastore(file:string) {
           data[keyname].push(record);
           return affectedId;
         },
+        update: async (predicate, updates) => {
+          if (updates.id) throw 'id is immutable';
+          const index = data[keyname].findIndex(predicate);
+          if (index !== -1) {
+            const updated = { ...data[keyname][index], ...updates };
+            const affectedId = await persistence.commit({action:'update',details:{table:keyname,record:updated}});
+            data[keyname][index] = updated;
+            return affectedId;
+          }
+        },
         // Delete a record given a predicate
         delete: async predicate => {
           const deleteable = data[keyname].find(predicate);

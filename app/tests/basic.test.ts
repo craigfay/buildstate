@@ -12,10 +12,10 @@ async function createTest() {
   // Make Store
   await write(file, '', 'utf8');
   const store = await datastore(file); 
-
+  
   // Define Table
   await store.define('products');
-
+  
   // Create
   const blanketId = await store.products.create({ name: 'blanket', price: 8000 });
   const sweaterId = await store.products.create({ name: 'sweater', price: 5000 });
@@ -26,6 +26,25 @@ async function createTest() {
   if (allProducts.length != 3)
   throw new Error('Unexpected amount of products after creation');
 
+}
+
+async function updateTest() {
+    // Make Store
+    const store = await datastore(file); 
+
+    const affectedId = await store.products.update(
+      record => record.name == 'sweater',
+      { price: 4500 },
+    );
+
+
+    const updated = (await store.products.all()).find(
+      record => record.id == affectedId
+    );
+
+    if (updated.price !== 4500) {
+      throw new Error('Unexpected update result');
+    }
 }
 
 
@@ -49,7 +68,8 @@ async function unlinkTest() {
 
 export const tests = [
   createTest,
+  updateTest,
   deleteTest,
   deleteManyTest,
-  unlinkTest,
+  // unlinkTest,
 ];
