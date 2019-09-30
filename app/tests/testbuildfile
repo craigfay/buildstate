@@ -1,8 +1,0 @@
-{"action":"define","details":{"table":"products"}}
-{"action":"create","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"9e5b9d7e79fcc094397d4703fd1192f7545c1ca4c913062c160d492ede92b2d4"}}}
-{"action":"create","details":{"table":"products","record":{"name":"sweater","price":5000,"id":"50009a8ce665c2f54c1bd985ac25fd8d5b8a4e70f8619ee22f25ee15c5ae92f8"}}}
-{"action":"create","details":{"table":"products","record":{"name":"blanket","price":2500,"id":"5448343188394a5317da4f59eed50f4bb3ea1294d198c09536017b4f229b6db9"}}}
-{"action":"update","details":{"table":"products","record":{"name":"sweater","price":4500,"id":"50009a8ce665c2f54c1bd985ac25fd8d5b8a4e70f8619ee22f25ee15c5ae92f8"}}}
-{"action":"delete","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"9e5b9d7e79fcc094397d4703fd1192f7545c1ca4c913062c160d492ede92b2d4"}}}
-{"action":"delete","details":{"table":"products","record":{"name":"sweater","price":4500,"id":"50009a8ce665c2f54c1bd985ac25fd8d5b8a4e70f8619ee22f25ee15c5ae92f8"}}}
-{"action":"delete","details":{"table":"products","record":{"name":"blanket","price":2500,"id":"5448343188394a5317da4f59eed50f4bb3ea1294d198c09536017b4f229b6db9"}}}
