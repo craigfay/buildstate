@@ -41,6 +41,15 @@ export async function datastore(file:string) {
             return affectedId;
           }
         },
+        // Delete many records given a predicate
+        deleteMany: async predicate => {
+          const deleteables = data[keyname].filter(predicate);
+          return Promise.all(deleteables.map(async deleteable => {
+            const affectedId = await persistence.commit({ action: 'delete', details: { table: keyname, record: deleteable }});
+            data[keyname] = data[keyname].filter(record => record.id != deleteable.id);
+            return affectedId;
+          }))
+        },
       }
     }
   }

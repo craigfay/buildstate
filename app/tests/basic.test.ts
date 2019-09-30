@@ -5,11 +5,11 @@ import { promisify } from 'util';
 
 const unlink = promisify(fs.unlink);
 const write = promisify(fs.writeFile);
+const file = path.resolve(path.join(__dirname, './testbuildfile'));
 
 
-async function basicTest() {
+async function createTest() {
   // Make Store
-  const file = path.resolve(path.join(__dirname, './testbuildfile'));
   await write(file, '', 'utf8');
   const store = await datastore(file); 
 
@@ -26,29 +26,29 @@ async function basicTest() {
   if (allProducts.length != 3)
   throw new Error('Unexpected amount of products after creation');
 
-  // Delete
-  const deletedId = await store.products.delete(
-    product => product.name == 'blanket'
-  );
-  if (blanketId != deletedId)
-  throw new Error('Deletion did not work as expected')
 }
 
 
-async function basicTest2() {
-  // Make Store
-  const file = path.resolve(path.join(__dirname, './testbuildfile'));
+async function deleteTest() {
   const store = await datastore(file); 
+  const affectedId = await store.products.delete(p => p.name == 'blanket');
+  if (!affectedId)
+  throw new Error('Unexpected id after delete')
+}
 
-  // Get All
-  const allProductsAfterDeletion = await store.products.all();
-  if (allProductsAfterDeletion.length != 2)
-  throw new Error('Unexpected amount of products after deletion')
+async function deleteManyTest() {
+  const store = await datastore(file); 
+  const deletedIds = await store.products.deleteMany(product => product.name);
+  if (deletedIds.length != 2)
+  throw new Error('Unexpected product length after deleteMany')
+}
 
+async function unlinkTest() {
   await unlink(file);
 }
 
 export const tests = [
-  basicTest,
-  basicTest2,
+  createTest,
+  deleteTest,
+  deleteManyTest,
 ];

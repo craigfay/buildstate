@@ -1,5 +1,7 @@
 {"action":"define","details":{"table":"products"}}
-{"action":"create","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"537af935e41a74bfe04fb34b65b713c86f562d110e7e48612ffabfe7c16fc0f6"}}}
-{"action":"create","details":{"table":"products","record":{"name":"sweater","price":5000,"id":"d5d5e3e0cfbf8242a21a35c0c1fbdfeff52baa3e7d1034b51a13d123f00cd819"}}}
-{"action":"create","details":{"table":"products","record":{"name":"blanket","price":2500,"id":"39fac7604905ed71216f434e87c95c48000d3df3566a9ed26ba4a58bcdee3482"}}}
-{"action":"delete","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"537af935e41a74bfe04fb34b65b713c86f562d110e7e48612ffabfe7c16fc0f6"}}}
+{"action":"create","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"b67328ca63c988436cfefe7eb857a24ba261702b0a94e07724ffcbc714e262b7"}}}
+{"action":"create","details":{"table":"products","record":{"name":"sweater","price":5000,"id":"654ec1dc69a8e94a8f3e07a16659a8e4659b0ff1741d3f4d56187e35e1ec4637"}}}
+{"action":"create","details":{"table":"products","record":{"name":"blanket","price":2500,"id":"04e0bfb3815fb2351f4dfc7e0977946f24efbec30d0e8a76845bc022f4354891"}}}
+{"action":"delete","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"b67328ca63c988436cfefe7eb857a24ba261702b0a94e07724ffcbc714e262b7"}}}
+{"action":"delete","details":{"table":"products","record":{"name":"sweater","price":5000,"id":"654ec1dc69a8e94a8f3e07a16659a8e4659b0ff1741d3f4d56187e35e1ec4637"}}}
+{"action":"delete","details":{"table":"products","record":{"name":"blanket","price":2500,"id":"04e0bfb3815fb2351f4dfc7e0977946f24efbec30d0e8a76845bc022f4354891"}}}

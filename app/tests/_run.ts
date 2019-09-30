@@ -4,4 +4,4 @@ import { tests } from './basic.test';
   for (const test of tests) {
     await test();
   }
-})
+})()
