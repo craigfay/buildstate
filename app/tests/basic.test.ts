@@ -51,4 +51,5 @@ export const tests = [
   createTest,
   deleteTest,
   deleteManyTest,
+  unlinkTest,
 ];
