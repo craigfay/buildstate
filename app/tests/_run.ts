@@ -1,5 +1,7 @@
-import { run, testSuite } from './_runner'
+import { tests } from './basic.test';
 
-run(testSuite(
-  require('./mock-entities.test'),
-));
+(async () => {
+  for (const test of tests) {
+    await test();
+  }
+})

@@ -1,0 +1,5 @@
+{"action":"define","details":{"table":"products"}}
+{"action":"create","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"537af935e41a74bfe04fb34b65b713c86f562d110e7e48612ffabfe7c16fc0f6"}}}
+{"action":"create","details":{"table":"products","record":{"name":"sweater","price":5000,"id":"d5d5e3e0cfbf8242a21a35c0c1fbdfeff52baa3e7d1034b51a13d123f00cd819"}}}
+{"action":"create","details":{"table":"products","record":{"name":"blanket","price":2500,"id":"39fac7604905ed71216f434e87c95c48000d3df3566a9ed26ba4a58bcdee3482"}}}
+{"action":"delete","details":{"table":"products","record":{"name":"blanket","price":8000,"id":"537af935e41a74bfe04fb34b65b713c86f562d110e7e48612ffabfe7c16fc0f6"}}}

@@ -21,6 +21,7 @@ export async function datastore(file:string) {
 
   // Retrieve a table
   dataProxy.get = function(target, keyname) {
+    if (target[keyname]) return target[keyname];
     if (data[keyname]) {
       return {
         // See all records
