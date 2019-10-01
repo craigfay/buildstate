@@ -14,7 +14,7 @@ interface Datastore {
 }
 
 interface Mutation {
-  action: 'define' | 'create' | 'update' | 'delete'
+  action: 'define' | 'drop' | 'create' | 'update' | 'delete'
   details: any,
 }
 
@@ -60,6 +60,9 @@ function applyMutation(data:Datastore={}, mutation:Mutation): Datastore {
   const { action, details } = mutation;
   if (action == 'define') {
     data[details.table] = [];
+  }
+  if (action == 'drop') {
+    delete data[details.table];
   }
   else if (action == 'create') {
     data[details.table].push(details.record);

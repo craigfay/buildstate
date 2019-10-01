@@ -16,6 +16,18 @@ export async function datastore(file:string) {
       data[table] = [];
     }
   }
+  methods.drop = async function(table:string) {
+    if (!data[table]) {
+      throw new Error(`Cannot drop non-existent table ${table}`)
+    }
+    else {
+      await persistence.commit({ action: 'drop', details: { table } });
+      delete data[table];
+    }
+  }
+  methods.tables = function() {
+    return Object.keys(data);
+  }
 
   const dataProxy:any = {};
 

@@ -55,7 +55,7 @@ async function updateManyTest() {
       { price: 1000 },
     );
     if (affectedIds.length != 3)
-    throw new Error('Unexpected product length after updateMany')
+    throw new Error('Unexpected product length after updateMany()')
 }
 
 
@@ -63,14 +63,24 @@ async function deleteTest() {
   const store = await datastore(file); 
   const affectedId = await store.products.delete(p => p.name == 'blanket');
   if (!affectedId)
-  throw new Error('Unexpected id after delete')
+  throw new Error('Unexpected id after delete()')
 }
 
 async function deleteManyTest() {
   const store = await datastore(file); 
   const deletedIds = await store.products.deleteMany(product => product.name);
   if (deletedIds.length != 2)
-  throw new Error('Unexpected product length after deleteMany')
+  throw new Error('Unexpected product length after deleteMany()')
+}
+
+async function dropTest() {
+  const store = await datastore(file);
+  if (store.tables().length != 1)
+  throw new Error('Unexpected tables length before drop()')
+  await store.drop('products');
+  if (store.tables().length != 0)
+  throw new Error('Unexpected tables length after drop()')
+
 }
 
 async function unlinkTest() {
@@ -83,5 +93,6 @@ export const tests = [
   updateManyTest,
   deleteTest,
   deleteManyTest,
+  dropTest,
   unlinkTest,
 ];
