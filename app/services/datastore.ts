@@ -92,6 +92,5 @@ export async function datastore(file:string) {
       }
     }
   }
-
   return new Proxy(methods, dataProxy);
 }

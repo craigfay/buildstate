@@ -80,7 +80,10 @@ async function dropTest() {
   await store.drop('products');
   if (store.tables().length != 0)
   throw new Error('Unexpected tables length after drop()')
-
+  
+  const newStore = await datastore(file);
+  if (store.tables().length != 0)
+  throw new Error('Unexpected tables length after drop() and rebuild');
 }
 
 async function unlinkTest() {
