@@ -48,8 +48,7 @@ export async function datastore(file:string) {
           data[keyname] = data[keyname].map(record => {
             if (predicate(record)) {
               const updated = { ...record, ...updates };
-              const affectedId = persistence.commit({action:'update',details:{table:keyname,record:updated}});
-              affectedIds.push(affectedId);
+              affectedIds.push(persistence.commit({action:'update',details:{table:keyname,record:updated}}));
               return updated;
             }
             return record;
@@ -68,11 +67,15 @@ export async function datastore(file:string) {
         // Delete many records given a predicate
         deleteMany: async predicate => {
           const deleteables = data[keyname].filter(predicate);
-          return Promise.all(deleteables.map(async deleteable => {
-            const affectedId = await persistence.commit({ action: 'delete', details: { table: keyname, record: deleteable }});
-            data[keyname] = data[keyname].filter(record => record.id != deleteable.id);
-            return affectedId;
-          }))
+          const affectedIds = [];
+          data[keyname] = data[keyname].filter(record => {
+            if (predicate(record)) {
+              affectedIds.push(persistence.commit({ action: 'delete', details: { table: keyname, record }}));
+              return false;
+            }
+            return true;
+          });
+          return Promise.all(affectedIds);
         },
       }
     }
